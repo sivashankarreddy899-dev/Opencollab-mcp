@@ -117,6 +117,10 @@ The container runs as a non-root user with `TRANSPORT=streamable-http` on port 8
 For an SSE client, use `-e TRANSPORT=sse`; both remote transports bind to
 `0.0.0.0` and accept `PORT` (default `8000`).
 
+The `/health` endpoint is available for health checks.
+For an SSE client, use `-e TRANSPORT=sse`; both remote transports bind to
+`0.0.0.0` and accept `PORT` (default `8000`).
+
 </details>
 
 ### Step 3 — Try it
@@ -151,7 +155,7 @@ The AI picks which tools to call based on what you ask.
 
 | Tool | What it does |
 |---|---|
-| `opencollab_match_me` | Reads your GitHub profile, detects your top language, returns 10 matching good-first-issues — all in one call. |
+| `opencollab_match_me` | Reads your GitHub profile, detects your top language, accepts `difficulty` (`beginner` / `intermediate`), and returns matching good-first-issues. |
 | `opencollab_find_issues` | Up to 15 recent issues for a given language, with beginner (`good first issue`) and intermediate (`help wanted`) difficulty filters. |
 
 </details>
@@ -161,7 +165,7 @@ The AI picks which tools to call based on what you ask.
 
 | Tool | What it does |
 |---|---|
-| `opencollab_repo_health` | 0–100 contributor-friendliness score: activity, PR merge rate, community files, forks. |
+| `opencollab_repo_health` | 0–100 contributor-friendliness score: activity, PR merge rate, community files, forks, and `community_profile_available`. |
 | `opencollab_impact_estimator` | Impact tier (LOW → MASSIVE) based on stars + reach, plus a draft resume line. |
 
 </details>
@@ -171,7 +175,7 @@ The AI picks which tools to call based on what you ask.
 
 | Tool | What it does |
 |---|---|
-| `opencollab_check_issue_availability` | Is the issue still open? Assigned? Already has a PR? Checks the timeline so you don't waste a weekend. |
+| `opencollab_check_issue_availability` | Checks whether the issue is open, rejects PR numbers, detects already-merged linked PRs, and reports `linked_prs_checked`. |
 | `opencollab_generate_pr_plan` | Bundles the issue body, comments, CONTRIBUTING.md, and repo layout for the AI to plan a fix. |
 
 </details>
@@ -261,7 +265,9 @@ Already shipped (v0.6.0):
 - pytest suite on Python 3.10/3.11/3.12 in CI
 - Stdio (local) and streamable-HTTP (remote) transports
 - Branch protection + required CI checks on `main`
-
+- MCP 2.x server API migration
+- `/health` endpoint
+- Input validation with Pydantic models
 Open ideas:
 
 - `first_pr_generator` — chain `match_me` + `check_issue_availability` + `generate_pr_plan` into one prompt
